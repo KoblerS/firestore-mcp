@@ -1,5 +1,13 @@
 # 🔥 Firebase MCP Server
 
+[![npm version](https://img.shields.io/npm/v/firebase-mcp-server.svg)](https://www.npmjs.com/package/firebase-mcp-server)
+[![npm downloads](https://img.shields.io/npm/dm/firebase-mcp-server.svg)](https://www.npmjs.com/package/firebase-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/node/v/firebase-mcp-server.svg)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org)
+[![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io)
+[![GitHub](https://img.shields.io/github/stars/KoblerS/firestore-mcp?style=social)](https://github.com/KoblerS/firestore-mcp)
+
 A command-based (stdio) [Model Context Protocol](https://modelcontextprotocol.io) server for **Google Firebase**, providing Auth and Firestore tools. Credentials are loaded dynamically from your project directory.
 
 ## Features
