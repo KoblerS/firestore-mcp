@@ -8,12 +8,13 @@
 [![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io)
 [![GitHub](https://img.shields.io/github/stars/KoblerS/firestore-mcp?style=social)](https://github.com/KoblerS/firestore-mcp)
 
-A command-based (stdio) [Model Context Protocol](https://modelcontextprotocol.io) server for **Google Firebase**, providing Auth and Firestore tools. Credentials are loaded dynamically from your project directory.
+A command-based (stdio) [Model Context Protocol](https://modelcontextprotocol.io) server for **Google Firebase**, providing Auth, Firestore, and Storage tools. Credentials are loaded dynamically from your project directory.
 
 ## Features
 
 - **🔐 Auth Tools** — List, get, create, update, delete users & set custom claims
 - **📄 Firestore Tools** — Browse collections, read/write/query/delete documents
+- **📦 Storage Tools** — List, upload, download, copy, move & delete files, generate signed URLs
 - **🔍 Dynamic Credentials** — Automatically finds `.firebase/service-account.json` walking up from cwd
 - **📦 npx-ready** — Run directly with `npx firebase-mcp-server`, no global install needed
 
@@ -196,6 +197,20 @@ npx @modelcontextprotocol/inspector firebase-mcp
 | `firestore_update_document` | Update specific fields |
 | `firestore_delete_document` | Delete a document |
 
+### 📦 Storage Tools
+
+| Tool | Description |
+|------|-------------|
+| `storage_list_files` | List files & folders in a bucket (with prefix filter, pagination) |
+| `storage_get_file_metadata` | Get file metadata (size, content type, timestamps, custom metadata) |
+| `storage_get_download_url` | Get a Firebase download URL for a file |
+| `storage_get_signed_url` | Generate a temporary signed URL (read or write, up to 7 days) |
+| `storage_upload` | Upload text or base64 content to a file |
+| `storage_download` | Download a file as text or base64 (max 10MB) |
+| `storage_delete_file` | Delete a file |
+| `storage_copy_file` | Copy a file (same or different bucket) |
+| `storage_move_file` | Move / rename a file |
+
 ## Usage Examples
 
 Once connected, you can ask your AI assistant things like:
@@ -211,6 +226,12 @@ Once connected, you can ask your AI assistant things like:
 > "Count how many documents are in the 'products' collection"
 
 > "Update the user with UID xyz to set displayName to 'John Doe'"
+
+> "List all files in the 'images/' folder in Storage"
+
+> "Upload this JSON to storage at 'exports/data.json'"
+
+> "Generate a signed download URL for 'reports/monthly.pdf' that expires in 24 hours"
 
 ### Special Field Values (for writes)
 
@@ -243,7 +264,8 @@ firebase-mcp/
 │   ├── utils.ts          # Serialization & helpers
 │   └── tools/
 │       ├── auth.ts       # Firebase Auth tools (6)
-│       └── firestore.ts  # Firestore tools (8)
+│       ├── firestore.ts  # Firestore tools (8)
+│       └── storage.ts    # Firebase Storage tools (9)
 ├── dist/                 # Compiled output (after build)
 ├── package.json
 ├── tsconfig.json

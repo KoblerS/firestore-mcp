@@ -4,6 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerAuthTools } from "./tools/auth.js";
 import { registerFirestoreTools } from "./tools/firestore.js";
+import { registerStorageTools } from "./tools/storage.js";
 import { getProjectId, initFirebase, setCredentialsOverride } from "./firebase.js";
 import { parseArgs } from "node:util";
 
@@ -73,6 +74,7 @@ async function main() {
   // Register all tools
   registerAuthTools(server);
   registerFirestoreTools(server);
+  registerStorageTools(server);
 
   // Connect via stdio transport
   const transport = new StdioServerTransport();

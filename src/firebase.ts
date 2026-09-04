@@ -1,6 +1,7 @@
 import { initializeApp, cert, getApps, type App, type ServiceAccount } from "firebase-admin/app";
 import { getAuth, type Auth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getStorage, type Storage } from "firebase-admin/storage";
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 
@@ -104,6 +105,7 @@ function resolveCredentialsPath(): string {
 let app: App | null = null;
 let authInstance: Auth | null = null;
 let firestoreInstance: Firestore | null = null;
+let storageInstance: Storage | null = null;
 
 /**
  * Initializes Firebase Admin SDK with dynamically resolved credentials.
@@ -152,6 +154,17 @@ export function getFirestoreInstance(): Firestore {
     firestoreInstance = getFirestore();
   }
   return firestoreInstance;
+}
+
+/**
+ * Returns the Firebase Storage instance (lazy-initialized).
+ */
+export function getStorageInstance(): Storage {
+  if (!storageInstance) {
+    initFirebase();
+    storageInstance = getStorage();
+  }
+  return storageInstance;
 }
 
 /**

@@ -3,4 +3,5 @@ dist/
 *.js.map
 *.d.ts
 .firebase/
+.claude/
 *.log
