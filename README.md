@@ -1,0 +1,259 @@
+# 🔥 Firebase MCP Server
+
+A command-based (stdio) [Model Context Protocol](https://modelcontextprotocol.io) server for **Google Firebase**, providing Auth and Firestore tools. Credentials are loaded dynamically from your project directory.
+
+## Features
+
+- **🔐 Auth Tools** — List, get, create, update, delete users & set custom claims
+- **📄 Firestore Tools** — Browse collections, read/write/query/delete documents
+- **🔍 Dynamic Credentials** — Automatically finds `.firebase/service-account.json` walking up from cwd
+- **📦 npx-ready** — Run directly with `npx firebase-mcp-server`, no global install needed
+
+## Quick Start
+
+### 1. Get your Service Account Key
+
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Select your project
+3. **Project Settings** → **Service Accounts** → **Generate New Private Key**
+4. Save the downloaded JSON file
+
+### 2. Place it in your project
+
+```bash
+# In your project root
+mkdir -p .firebase
+mv ~/Downloads/your-project-firebase-adminsdk-*.json .firebase/service-account.json
+
+# IMPORTANT: Add to .gitignore!
+echo ".firebase/" >> .gitignore
+```
+
+### 3. Configure your MCP Client
+
+#### Claude Code (CLI) ⭐ Recommended
+
+Claude Code sets `cwd` to your project root automatically — credentials are found with zero config:
+
+```bash
+claude mcp add firebase -- npx -y firebase-mcp-server
+```
+
+That's it. As long as `.firebase/service-account.json` exists in your project, it works.
+
+#### Claude Desktop
+
+Add to `~/.claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-mcp-server"],
+      "cwd": "/path/to/your-project"
+    }
+  }
+}
+```
+
+Or pass the credentials path explicitly (no `cwd` needed):
+
+```json
+{
+  "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-mcp-server", "--service-account", "/path/to/your-project/.firebase/service-account.json"]
+    }
+  }
+}
+```
+
+#### Cursor
+
+Add to `.cursor/mcp.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-mcp-server"]
+    }
+  }
+}
+```
+
+#### Windsurf
+
+Add to `~/.windsurf/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-mcp-server"]
+    }
+  }
+}
+```
+
+## CLI Options
+
+```
+firebase-mcp [options]
+
+Options:
+  --service-account <path>   Explicit path to service account JSON file
+  --project-dir <path>       Directory to search .firebase/service-account.json from
+  --help                     Show help
+```
+
+## Credential Resolution
+
+The server searches for credentials in this order:
+
+1. **`--service-account <path>`** — Explicit path to the JSON key file
+2. **`.firebase/service-account.json`** — Walked up from `--project-dir` or `cwd` (like `.git` lookup)
+3. **`GOOGLE_APPLICATION_CREDENTIALS`** — Standard Google Cloud env var
+4. **`FIREBASE_SERVICE_ACCOUNT_PATH`** — Custom env var for explicit path
+
+### How does this work with Claude Code?
+
+Claude Code **always starts MCP servers with `cwd` set to your project root**. So if your project looks like this:
+
+```
+my-project/
+├── .firebase/
+│   └── service-account.json   ← found automatically!
+├── src/
+├── package.json
+└── ...
+```
+
+…the server finds credentials without any extra config. No `cwd` override needed.
+
+For Claude Desktop, `cwd` is static in the config. Use `--service-account` for a fixed path, or set `cwd` in the JSON config.
+
+## Local Development & Testing
+
+```bash
+# Clone and build
+git clone <this-repo>
+cd firebase-mcp
+npm install && npm run build
+
+# Link globally for local testing
+npm link
+
+# Test CLI
+firebase-mcp --help
+firebase-mcp --service-account /path/to/key.json    # explicit
+firebase-mcp --project-dir /path/to/your/project     # search from dir
+firebase-mcp                                          # search from cwd
+
+# Test with Claude Code (from your Firebase project dir)
+cd /path/to/your-project
+claude mcp add firebase -- firebase-mcp
+
+# Or test with MCP Inspector
+npx @modelcontextprotocol/inspector firebase-mcp
+```
+
+## Available Tools
+
+### 🔐 Auth Tools
+
+| Tool | Description |
+|------|-------------|
+| `firebase_auth_get_user` | Get user by UID or email |
+| `firebase_auth_list_users` | List users (paginated, max 1000) |
+| `firebase_auth_create_user` | Create a new user |
+| `firebase_auth_update_user` | Update user properties |
+| `firebase_auth_delete_user` | Delete a user |
+| `firebase_auth_set_custom_claims` | Set custom claims (roles, permissions) |
+
+### 📄 Firestore Tools
+
+| Tool | Description |
+|------|-------------|
+| `firestore_list_collections` | List top-level or sub-collections |
+| `firestore_get_document` | Get a single document by path |
+| `firestore_list_documents` | List documents in a collection (paginated) |
+| `firestore_query_documents` | Query with where/orderBy/limit filters |
+| `firestore_count_documents` | Count documents (with optional filters) |
+| `firestore_set_document` | Create or overwrite a document |
+| `firestore_update_document` | Update specific fields |
+| `firestore_delete_document` | Delete a document |
+
+## Usage Examples
+
+Once connected, you can ask your AI assistant things like:
+
+> "List all collections in Firestore"
+
+> "Show me the first 10 users in Firebase Auth"
+
+> "Query the 'orders' collection for all orders where status == 'pending'"
+
+> "Get the document at users/abc123"
+
+> "Count how many documents are in the 'products' collection"
+
+> "Update the user with UID xyz to set displayName to 'John Doe'"
+
+### Special Field Values (for writes)
+
+The Firestore write tools support special field values:
+
+```json
+// Server timestamp
+{ "_type": "serverTimestamp" }
+
+// Increment a number field
+{ "_type": "increment", "value": 5 }
+
+// Add to an array field
+{ "_type": "arrayUnion", "elements": ["tag1", "tag2"] }
+
+// Remove from an array field
+{ "_type": "arrayRemove", "elements": ["tag1"] }
+
+// Delete a field
+{ "_type": "delete" }
+```
+
+## Project Structure
+
+```
+firebase-mcp/
+├── src/
+│   ├── index.ts          # CLI entry point with arg parsing
+│   ├── firebase.ts       # Dynamic credential loading & Firebase init
+│   ├── utils.ts          # Serialization & helpers
+│   └── tools/
+│       ├── auth.ts       # Firebase Auth tools (6)
+│       └── firestore.ts  # Firestore tools (8)
+├── dist/                 # Compiled output (after build)
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+## Security Notes
+
+⚠️ **Never commit your service account key to git!**
+
+Make sure `.firebase/` is in your `.gitignore`:
+
+```gitignore
+.firebase/
+```
+
+The service account key grants **full admin access** to your Firebase project. Treat it like a password.
+
+## License
+
+MIT

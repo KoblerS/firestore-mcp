@@ -1,0 +1,36 @@
+{
+  "name": "firebase-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Google Firebase (Auth + Firestore) with dynamic credential loading",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "firebase-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "firebase",
+    "firestore",
+    "auth",
+    "model-context-protocol"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "firebase-admin": "^14.3.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
