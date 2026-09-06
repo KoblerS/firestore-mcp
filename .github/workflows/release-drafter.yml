@@ -1,0 +1,29 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+
+      - uses: KoblerS/release-drafter@49bc6fe409213d41eaa55e6170faabfa66d49943 # v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate-release-notes: true
+          version-prefix: 'v'

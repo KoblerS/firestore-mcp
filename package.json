@@ -1,7 +1,7 @@
 {
   "name": "firebase-mcp-server",
-  "version": "1.0.0",
-  "description": "MCP Server for Google Firebase (Auth + Firestore) with dynamic credential loading",
+  "version": "0.0.0-development",
+  "description": "MCP Server for Google Firebase (Auth, Firestore & Storage) with dynamic credential loading",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -20,10 +20,23 @@
     "mcp",
     "firebase",
     "firestore",
+    "firebase-auth",
+    "firebase-storage",
     "auth",
+    "storage",
     "model-context-protocol"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KoblerS/firestore-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KoblerS/firestore-mcp/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
     "firebase-admin": "^14.3.0",
