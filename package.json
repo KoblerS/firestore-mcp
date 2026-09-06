@@ -1,6 +1,6 @@
 {
   "name": "firebase-mcp-server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "MCP Server for Google Firebase (Auth + Firestore) with dynamic credential loading",
   "type": "module",
   "main": "dist/index.js",
