@@ -54,19 +54,18 @@ That's it. As long as `.firebase/service-account.json` exists in your project, i
 
 Add to `~/.claude/claude_desktop_config.json`:
 
-```json
+```jsonc
 {
   "mcpServers": {
     "firebase": {
       "command": "npx",
-      "args": ["-y", "firebase-mcp-server"],
-      "cwd": "/path/to/your-project"
+      "args": ["-y", "firebase-mcp-server"]
     }
   }
 }
 ```
 
-Or pass the credentials path explicitly (no `cwd` needed):
+Or pass the credentials path explicitly:
 
 ```json
 {
@@ -175,41 +174,41 @@ npx @modelcontextprotocol/inspector firebase-mcp
 
 ### 🔐 Auth Tools
 
-| Tool | Description |
-|------|-------------|
-| `firebase_auth_get_user` | Get user by UID or email |
-| `firebase_auth_list_users` | List users (paginated, max 1000) |
-| `firebase_auth_create_user` | Create a new user |
-| `firebase_auth_update_user` | Update user properties |
-| `firebase_auth_delete_user` | Delete a user |
+| Tool                              | Description                            |
+| --------------------------------- | -------------------------------------- |
+| `firebase_auth_get_user`          | Get user by UID or email               |
+| `firebase_auth_list_users`        | List users (paginated, max 1000)       |
+| `firebase_auth_create_user`       | Create a new user                      |
+| `firebase_auth_update_user`       | Update user properties                 |
+| `firebase_auth_delete_user`       | Delete a user                          |
 | `firebase_auth_set_custom_claims` | Set custom claims (roles, permissions) |
 
 ### 📄 Firestore Tools
 
-| Tool | Description |
-|------|-------------|
-| `firestore_list_collections` | List top-level or sub-collections |
-| `firestore_get_document` | Get a single document by path |
-| `firestore_list_documents` | List documents in a collection (paginated) |
-| `firestore_query_documents` | Query with where/orderBy/limit filters |
-| `firestore_count_documents` | Count documents (with optional filters) |
-| `firestore_set_document` | Create or overwrite a document |
-| `firestore_update_document` | Update specific fields |
-| `firestore_delete_document` | Delete a document |
+| Tool                         | Description                                |
+| ---------------------------- | ------------------------------------------ |
+| `firestore_list_collections` | List top-level or sub-collections          |
+| `firestore_get_document`     | Get a single document by path              |
+| `firestore_list_documents`   | List documents in a collection (paginated) |
+| `firestore_query_documents`  | Query with where/orderBy/limit filters     |
+| `firestore_count_documents`  | Count documents (with optional filters)    |
+| `firestore_set_document`     | Create or overwrite a document             |
+| `firestore_update_document`  | Update specific fields                     |
+| `firestore_delete_document`  | Delete a document                          |
 
 ### 📦 Storage Tools
 
-| Tool | Description |
-|------|-------------|
-| `storage_list_files` | List files & folders in a bucket (with prefix filter, pagination) |
+| Tool                        | Description                                                         |
+| --------------------------- | ------------------------------------------------------------------- |
+| `storage_list_files`        | List files & folders in a bucket (with prefix filter, pagination)   |
 | `storage_get_file_metadata` | Get file metadata (size, content type, timestamps, custom metadata) |
-| `storage_get_download_url` | Get a Firebase download URL for a file |
-| `storage_get_signed_url` | Generate a temporary signed URL (read or write, up to 7 days) |
-| `storage_upload` | Upload text or base64 content to a file |
-| `storage_download` | Download a file as text or base64 (max 10MB) |
-| `storage_delete_file` | Delete a file |
-| `storage_copy_file` | Copy a file (same or different bucket) |
-| `storage_move_file` | Move / rename a file |
+| `storage_get_download_url`  | Get a Firebase download URL for a file                              |
+| `storage_get_signed_url`    | Generate a temporary signed URL (read or write, up to 7 days)       |
+| `storage_upload`            | Upload text or base64 content to a file                             |
+| `storage_download`          | Download a file as text or base64 (max 10MB)                        |
+| `storage_delete_file`       | Delete a file                                                       |
+| `storage_copy_file`         | Copy a file (same or different bucket)                              |
+| `storage_move_file`         | Move / rename a file                                                |
 
 ## Usage Examples
 
